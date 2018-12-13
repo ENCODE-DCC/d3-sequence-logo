@@ -14,8 +14,6 @@
  *  (3) call entry_point with (1) and (2).
  */
 
-let d3 = require('d3');
-
 /**
  * For each index, get the transform needed so that things line up
  * correctly. This is an artifact of the font->svg path conversion 
@@ -116,7 +114,7 @@ function offsets(cnts, maxCount) {
     let dnew = 0;
     if (d > 0) {
         let relative_frequency = d / maxCount;
-        dnew = (2 - H) * relative_frequency * (maxCount/2);//maxCount/2 is scaling factor
+        dnew = (2 - H) * relative_frequency * 10; // 10 is scaling factor not a mathematical constant
     }
     offsetFromTop = offsetFromTop + dnew;
 
@@ -295,7 +293,7 @@ function getRandomData(seqLenBounds, seqNumBounds) {
  * @param {number[]} seqLenBounds
  * @param {number[]} seqNumBounds
  */
-function entryPoint(logoSelector, PWM) {
+function entryPoint(logoSelector, PWM, d3) {
   // skipping error checking for now
   // const isValid = isValidData(sequenceData, seqLenBounds, seqNumBounds);
   // 
