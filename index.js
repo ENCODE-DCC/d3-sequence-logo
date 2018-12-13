@@ -14,8 +14,6 @@
  *  (3) call entry_point with (1) and (2).
  */
 
-let d3 = require('d3');
-
 /**
  * For each index, get the transform needed so that things line up
  * correctly. This is an artifact of the font->svg path conversion 
@@ -295,7 +293,7 @@ function getRandomData(seqLenBounds, seqNumBounds) {
  * @param {number[]} seqLenBounds
  * @param {number[]} seqNumBounds
  */
-function entryPoint(logoSelector, PWM) {
+function entryPoint(logoSelector, PWM, d3) {
   // skipping error checking for now
   // const isValid = isValidData(sequenceData, seqLenBounds, seqNumBounds);
   // 
