@@ -2,10 +2,10 @@
  * File: sequence_logo.js
  * Author: Sam Lichtenberg (splichte@gmail.com)
  *
- * This file implements sequence logo generation for 
+ * This file implements sequence logo generation for
  * bounded sequences in d3.
  *
- * See `https://en.wikipedia.org/wiki/Sequence_logo` 
+ * See `https://en.wikipedia.org/wiki/Sequence_logo`
  * for more information.
  *
  * Usage (see `index.html` for example):
@@ -14,15 +14,15 @@
  *  (3) call entry_point with (1) and (2).
  */
 
-let d3 = require('d3');
+var d3 = require('d3');
 
 /**
  * For each index, get the transform needed so that things line up
- * correctly. This is an artifact of the font->svg path conversion 
+ * correctly. This is an artifact of the font->svg path conversion
  * used (letter paths are not even width, even in monospace fonts).
  *
  * @param {number} i - letter index. Range: [0,4)
- * @returns {number[]} baseTransform - the (x,y) transform that will 
+ * @returns {number[]} baseTransform - the (x,y) transform that will
  *  be applied to all letters.
  */
 function getLetterBaseTransform(i) {
@@ -44,9 +44,9 @@ function getLetterBaseTransform(i) {
 /**
  * The letters G,A,C,T are encoded as constant SVG path strings
  * which undergo 'transform' operations when exposed to the data.
- * 
+ *
  * @param {number} i - letter index. Range: [0,4)
- * @returns {string} SVG path corresponding to i. 
+ * @returns {string} SVG path corresponding to i.
  */
 function getLetterPath(i) {
   const letterA = 'M142.59,54.29l-5,15.27h-6.48L147.55,21h7.56l16.56,48.53H165l-5.18-15.27Zm15.91-4.9-4.75-14c-1.08-3.17-1.8-6-2.52-8.86h-.14c-.72,2.88-1.51,5.83-2.45,8.78l-4.75,14Z';
@@ -72,7 +72,7 @@ function getLetterPath(i) {
 /**
  * @param {string[]} s - sequence data. An array of equal-length strings.
  * @param {number} i - letter index. Range: [0,4)
- * @returns {number[]} counts of each letter. 
+ * @returns {number[]} counts of each letter.
  */
 function getLetterCnts(s, i) {
   const dict = { A: 0,
@@ -91,14 +91,14 @@ function getLetterCnts(s, i) {
 /**
  * @param {string[]} s - sequence data. An array of equal-length strings.
  * @param {number} i - letter index. Range: [0,4)
- * @returns {number[][]} counts of each letter. 
+ * @returns {number[][]} counts of each letter.
  */
 function offsets(cnts, maxCount) {
   const offs = [];
 
   let ctr = 0;
   let en = 0;//1 / 0.69314718056 * (4 - 1) / (2 * maxCount);
-  
+
   let H = 0;
 
   cnts.forEach((d,j) => {
@@ -134,7 +134,7 @@ function offsets(cnts, maxCount) {
   // re-arrange data structure based on sort
   const outOffsets = [];
   ctr = maxCount - offsetFromTop;
-  
+
   offs.forEach((d) => {
     const diff = d[2];
     outOffsets.push([ctr, ctr + diff, d[3]]);
@@ -190,15 +190,15 @@ function calcPathTransform(path, d, yscale, colWidth) {
 }
 
 /**
- * Checks that sequence data obeys bounds, and that each 
+ * Checks that sequence data obeys bounds, and that each
  * sequence has the same length.
  *
  * Possible change is to create more informative error msg.
  *
  * @param {string[]} data - sequenceData
- * @param {number[]} seqLenBounds - lower/upper bounds for 
+ * @param {number[]} seqLenBounds - lower/upper bounds for
  *  number of bases in a sequence.
- * @param {number[]} seqNumBounds - lower/upper bounds for 
+ * @param {number[]} seqNumBounds - lower/upper bounds for
  *  number of sequences.
  * @returns {boolean} true/false - does the data conform?
  */
@@ -225,9 +225,9 @@ function isValidData(data, seqLenBounds, seqNumBounds) {
 
 /**
  * Yields nucleotide base string corresponding to given int.
- * 
+ *
  * @param {number} i
- * @returns {string} 
+ * @returns {string}
  */
 
 function intToLetter(i) {
@@ -245,9 +245,9 @@ function intToLetter(i) {
 
 /**
  * Standard, from MDN.
- * Returns a random integer between min (inclusive) and max 
+ * Returns a random integer between min (inclusive) and max
  * (inclusive)
- * 
+ *
  * @param {number} min
  * @param {number} max
  * @returns {number}
@@ -258,11 +258,11 @@ function getRandomInt(min, max) {
 
 
 /**
- * Generate random sequences by sampling from DiscreteUniform(0,4). 
+ * Generate random sequences by sampling from DiscreteUniform(0,4).
  *
- * A different approach could be to favor some bases more 
- * than others at different positions by modeling the 
- * distribution P(base | position) as a categorical that 
+ * A different approach could be to favor some bases more
+ * than others at different positions by modeling the
+ * distribution P(base | position) as a categorical that
  * has its parameters sampled from a Dirichlet.
  *
  * @param {number[]} seqLenBounds
@@ -298,7 +298,7 @@ function getRandomData(seqLenBounds, seqNumBounds) {
 function entryPoint(logoSelector, PWM) {
   // skipping error checking for now
   // const isValid = isValidData(sequenceData, seqLenBounds, seqNumBounds);
-  // 
+  //
   // if (!isValid) {
   //   return;
   // }
@@ -317,9 +317,9 @@ function entryPoint(logoSelector, PWM) {
 
   /**
    * Next, we set local values that govern visual appearance.
-   * 
+   *
    * We define width/height here, rather than in the HTML,
-   * so one can easily switch the code to modify svg size 
+   * so one can easily switch the code to modify svg size
    * based on the data if desired.
    */
 
@@ -387,7 +387,7 @@ function entryPoint(logoSelector, PWM) {
     .style('text-anchor', 'end')
     .style('font-size', endptFontSize)
     .attr('transform', `translate(${svgFullWidth},${endptTY + 10})`);
-    
+
   // Add the y axis
   let y = d3.scaleLinear().range([svgLetterHeight, 0]);
   y.domain([0, 2]);
@@ -409,7 +409,7 @@ function entryPoint(logoSelector, PWM) {
   /**
    * Our groups are organized by columns--
    * each column gets an SVG group.
-   * 
+   *
    * The column is used to neatly handle all x-offsets and labels.
    */
   const group = svg.selectAll('group')
@@ -421,11 +421,11 @@ function entryPoint(logoSelector, PWM) {
 
   /**
    * Attach the number labels to the x-axis.
-   * 
-   * A possible modification is to make xLabelFontSize 
-   * data-dependent. As written its position will change 
-   * with the column width (# of nucleotides), so 
-   * visually it will look fine, but it may be 
+   *
+   * A possible modification is to make xLabelFontSize
+   * data-dependent. As written its position will change
+   * with the column width (# of nucleotides), so
+   * visually it will look fine, but it may be
    * desirable to alter font size as well.
    */
   const xLabelFontSize = 20;
@@ -448,7 +448,7 @@ function entryPoint(logoSelector, PWM) {
    *
    * notes:
    *  Filter is used here to avoid attaching paths with 0 size
-   *  to the DOM. This filtering could optionally be performed 
+   *  to the DOM. This filtering could optionally be performed
    *  earlier, when we build yz.
    */
   group.selectAll('path')
