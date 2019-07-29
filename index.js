@@ -357,6 +357,9 @@ function entryPoint(logoSelector, PWM, d3) {
 
     // map: number of sequences -> svg letter height
     const yscale = d3.scaleLinear().domain([0, n]).range([0, svgLetterHeight]);
+    
+    // only want to append one logo to an element, redraw logo if component is refreshed
+    d3.select(logoSelector).select('svg').remove();
 
     const svg = d3.select(logoSelector)
         .append('svg')
